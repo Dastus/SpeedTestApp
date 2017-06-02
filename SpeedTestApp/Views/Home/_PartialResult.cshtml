@@ -1,0 +1,50 @@
+﻿@model SpeedTestApp.UI.ViewModels.MeasuresViewModel
+
+
+@if (ViewBag.ErrorMessage != null)
+{
+<br/>
+<strong>@ViewBag.ErrorMessage</strong>
+}
+
+@if (Model != null)
+{
+<h3>Graphical View</h3>
+<br />
+    foreach (var p in Model.CurrentResultsGraph)
+    {
+        <p>URL: @p.URL</p>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width:@p.Percent%">
+                @p.MeasureResult ms
+            </div>
+        </div>
+    }
+<hr>
+<h3>Table View</h3>
+<br/>
+<table class="table-striped">
+    <thead>
+        <tr>
+            <th>Page</th>
+            <th>Max Response, ms</th>
+            <th style="padding-left: 10px">Min Response, ms</th>
+            <th style="padding-left: 10px">History</th>
+        </tr>
+    </thead>
+    <tbody>
+     @foreach (var p in Model.HistoricalResults)
+        {
+
+            <tr>
+                <td style="padding-right: 10px">@p.PageURL</td>
+                <td>@p.Measures.Value.Max().Result</td>
+                <td style="padding-left: 10px">@p.Measures.Value.Min().Result</td>
+                <td style="padding-left: 10px">
+                    <a href="/Home/PageHistory/@p.PageId"  class="btn btn-primary">View</a>                    
+                </td>
+            </tr>   
+        }
+    </tbody>
+</table> 
+}   

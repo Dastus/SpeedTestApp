@@ -1,0 +1,31 @@
+﻿@model SpeedTestApp.Models.Page
+@{
+    Layout = "~/Views/_BasicLayout.cshtml";
+}
+<div class="container">
+<br/>
+<a href="/Home/Index" class="btn btn-primary">Back To Results</a> 
+</div>
+<div class="container" style="padding-top: 20px">
+    <strong>URL: @Model.PageURL </strong>
+    <br/>
+    <br/>
+    <table class="table-striped">
+        <thead>
+            <tr>
+                <th><p>Response, ms</p></th>
+                <th><p style="padding-left:25px">  Measure Time</p></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model.Measures.Value)
+            {
+
+                <tr>
+                    <td>@p.Result</td>
+                    <td>@p.MeasureTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>  
