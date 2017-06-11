@@ -10,7 +10,9 @@ namespace SpeedTestApp.DAL.EF
             Page page = new Page {
             PageId = this.ID,
             SiteID = this.SiteID,
-            PageURL = this.Page
+            PageURL = this.Page,
+            MaxResponse = this.MaxResponse,
+            MinResponse = this.MinResponse            
             };
 
             if (this.Measures.Count > 0)
@@ -30,7 +32,9 @@ namespace SpeedTestApp.DAL.EF
             PageEntity pageEntity = new PageEntity {                
                 Page = page.PageURL,
                 ID = page.PageId,
-                SiteID = page.SiteID
+                SiteID = page.SiteID,
+                MaxResponse = page.MaxResponse,
+                MinResponse = page.MinResponse
             };
 
             if (page.Measures.Value.Count > 0)

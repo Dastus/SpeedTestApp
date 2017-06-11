@@ -5,5 +5,6 @@ namespace SpeedTestApp.BL.Service
     public interface IMeasureManager
     {
         void AddMeasure(Measure measure, Page page);
+        Site MeasureResponse(string url);
     }
 }

@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using SpeedTestApp.BL.Service;
 using SpeedTestApp.Models;
-using SpeedTestApp.BL.Measurers;
 using System.Runtime.Caching;
 using SpeedTestApp.UI.ViewModels;
 
@@ -12,14 +11,14 @@ namespace SpeedTestApp.Controllers
     {
         private ISiteManager siteManager;
         private IPageManager pageManager;
-        private IMeasurer measurer;
+        private IMeasureManager measureManager;        
         private MemoryCache memoryCache = MemoryCache.Default;
 
-        public HomeController(ISiteManager siteManager, IPageManager pageManager, IMeasurer measurer)
+        public HomeController(ISiteManager siteManager, IPageManager pageManager, IMeasureManager measureManager)
         {
             this.siteManager = siteManager;
-            this.pageManager = pageManager;
-            this.measurer = measurer;
+            this.pageManager = pageManager;            
+            this.measureManager = measureManager;
         } 
 
         // GET: Home
@@ -34,12 +33,12 @@ namespace SpeedTestApp.Controllers
         
         public ActionResult Measure(string filter)
         {
-            if (filter != "")
+            if (filter != "" && filter != null)
             {                
                 string siteUrl = filter;
                 try
                 {
-                    Site site = measurer.MeasureResponse(siteUrl);
+                    Site site = measureManager.MeasureResponse(siteUrl);
                     MeasuresViewModel vm = siteManager.GetViewModel(site);
                     memoryCache.Remove("vm");
                     memoryCache.Add("vm", vm, DateTime.Now.AddMinutes(10));
@@ -47,8 +46,7 @@ namespace SpeedTestApp.Controllers
                 }
                 catch (System.Net.WebException)
                 {
-                    ViewBag.ErrorMessage = $"SiteMap for http://{siteUrl} not found";
-                    //return PartialView("_PartialResult");
+                    ViewBag.ErrorMessage = $"SiteMap for http://{siteUrl} not found";                    
                 }
             }
             return PartialView("_PartialResult");
@@ -57,7 +55,7 @@ namespace SpeedTestApp.Controllers
         [HttpGet]
         public ActionResult PageHistory(int? id)
         {
-            Page page = null;
+            Models.Page page = null;
             try
             {
                 page = pageManager.GetPageById(id.Value);

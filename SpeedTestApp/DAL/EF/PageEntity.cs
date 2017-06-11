@@ -23,6 +23,8 @@ namespace SpeedTestApp.DAL.EF
         public int ID { get; set; }
         public int SiteID { get; set; }
         public string Page { get; set; }
+        public int MaxResponse { get; set; }
+        public int MinResponse { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MeasureEntity> Measures { get; set; }

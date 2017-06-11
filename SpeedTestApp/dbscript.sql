@@ -101,6 +101,8 @@ CREATE TABLE [dbo].[Pages](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[SiteID] [int] NOT NULL,
 	[Page] [nvarchar](256) NOT NULL,
+	[MaxResponse] [int] NOT NULL,
+	[MinResponse] [int] NOT NULL,
  CONSTRAINT [PK_Pages] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC

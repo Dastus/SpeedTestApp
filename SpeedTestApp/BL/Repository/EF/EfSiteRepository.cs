@@ -39,8 +39,8 @@ namespace SpeedTestApp.BL.Repository.EF
         {
             using (SitePerformanceDBContext context = new SitePerformanceDBContext())
             {
-                SiteEntity siteEntity = context.Sites.AsNoTracking().Include("Pages").
-                    Include("Pages.Measures").FirstOrDefault(e => e.URL == url);
+                SiteEntity siteEntity = context.Sites.AsNoTracking().Include("Pages").FirstOrDefault(e => e.URL == url);
+                //Include("Pages.Measures").FirstOrDefault(e => e.URL == url);
                 return (siteEntity == null) ? null : siteEntity.ConvertToApplicationModel();
             }
         }

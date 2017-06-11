@@ -191,6 +191,7 @@
       <DependentUpon>SpeedTestModel.edmx</DependentUpon>
       <LastGenOutput>SpeedTestModel.cs</LastGenOutput>
     </Content>
+    <Content Include="dbscript.sql" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -214,8 +215,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="BL\Measurers\IMeasurer.cs" />
-    <Compile Include="BL\Measurers\Measurer.cs" />
     <Compile Include="BL\Repository\EF\EfMeasureRepository.cs" />
     <Compile Include="BL\Repository\EF\EfPageRepository.cs" />
     <Compile Include="BL\Repository\EF\EfSiteRepository.cs" />

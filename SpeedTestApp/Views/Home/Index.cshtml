@@ -7,23 +7,38 @@
         UpdateTargetId = "result"
     };
 }
-   
-    @using (Ajax.BeginForm("Measure", "Home", options))
-    {
-        <div class="col-xs-6">
-            <div class="input-group">
-                <input type="text" name="filter" class="form-control" placeholder="URL" />
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Check</button>
-                </span>
-            </div>
-        </div>
-    }
 
-    <div id="result" class="col-xs-8">
-        @if (Model != null)
-        {
-            @Html.Partial("_PartialResult", Model)
-        }        
+@using (Ajax.BeginForm("Measure", "Home", options))
+{
+    <div class="col-xs-6">
+        <div class="input-group">
+            <input type="text" id="filter" name="filter" class="form-control" placeholder="URL" value=@(Model == null ? null : Model.Site ) />
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">Check</button>
+            </span>
+        </div>
     </div>
+}
+
+<div id="result" style="margin-bottom: 3%" class="col-xs-8">
+    @if (Model != null)
+    {
+        @Html.Partial("_PartialResult", Model)
+    }
+</div>
+
+<script>
+$(
+function()
+{    
+    var Timer = setInterval(Reload, 10000);
+
+    function Reload()
+    {
+        var str = document.getElementById('filter').value;
+        $('#result').load("/Home/Measure", { filter : str });
+    }
+}
+);
+</script>
 

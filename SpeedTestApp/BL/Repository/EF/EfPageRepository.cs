@@ -32,6 +32,15 @@ namespace SpeedTestApp.BL.Repository.EF
 
                     if (pageEntity.ID > 0)
                     {
+                        // Update Min and Max values
+                        var dbPage = site.Pages.Value.Where(x => x.PageId == pageEntity.ID).FirstOrDefault();
+                        var pageContext = context.Pages.Where(x => x.ID == pageEntity.ID).FirstOrDefault();
+
+                        if (pageEntity.MaxResponse > dbPage.MaxResponse)                                
+                            pageContext.MaxResponse = pageEntity.MaxResponse;
+                        if (pageEntity.MinResponse < dbPage.MinResponse)
+                            pageContext.MinResponse = pageEntity.MinResponse;   
+                        //
                         if (pageEntity.Measures.Count > 0)
                         {
                             foreach (var m in pageEntity.Measures)

@@ -47,13 +47,14 @@ namespace SpeedTestApp.BL.Service
 
             Site historicalSite = GetSite(site.Url);
 
-            List<Page> historicalResults = historicalSite.Pages.Value;
-            historicalResults.Sort();
+            List<Page> historicalResults = historicalSite.Pages.Value.
+                OrderByDescending(x => x.MaxResponse).ToList();                     
 
-            List<Page> currentResults = site.Pages.Value;
-            currentResults.Sort();
+            List<Page> currentResults = site.Pages.Value.
+                OrderByDescending(x => x.MaxResponse).ToList();            
 
-            int max = currentResults.FirstOrDefault().Measures.Value.FirstOrDefault().Result;
+            int max = currentResults.Max().MaxResponse;
+                
             List<DisplayPageInfo> currentGraphResults = new List<DisplayPageInfo>();
             foreach (var p in currentResults)
             {

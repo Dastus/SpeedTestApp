@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace SpeedTestApp.Models
 {
@@ -9,19 +7,19 @@ namespace SpeedTestApp.Models
     {
         public int PageId { get; set; }
         public int SiteID { get; set; }
+        public int MaxResponse { get; set; }
+        public int MinResponse { get; set; }
         public string PageURL { get; set; }
         public Lazy<List<Measure>> Measures = new Lazy<List<Measure>>();
 
         public int CompareTo(Page otherPage)
         {
-            int thisResult = otherPage.Measures.Value.Max().Result;
-            int otherResult = this.Measures.Value.Max().Result;
-
-            if (thisResult > otherResult)
+            if (this.MaxResponse > otherPage.MaxResponse)
                 return 1;
-            if (thisResult < otherResult)
+            if (this.MaxResponse < otherPage.MaxResponse)
                 return -1;
             return 0;
         }
+
     }
 }
