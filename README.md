@@ -10,12 +10,15 @@ Functionality:
 Features:
 - Ajax partial view used to display results
 - StructureMap used as IoC/DI container
+- Project contains 2 repositories: with memory cache(setted up now) and with DB. 
 
 Short notes about application:
 
-google.com used for all tests because it has sitemap.xml and matches pattern 
-http://www.{SiteURL}/sitemap.xml
+Application checks sitemap.xml file, if it's not found, simple web crawling logic used.
+This solution suits only for small sites!
 
-Info about responses is stored in DB, SQLExpress has been used.
+Info about responses is stored in memory cache ,but can be stored in DB, SQLExpress has been used.
 Script for DataBase creation:
 https://github.com/Dastus/SpeedTestApp/blob/master/SpeedTestApp/dbscript.sql
+Following file should be updated to use EF repository:
+https://github.com/Dastus/SpeedTestApp/blob/master/SpeedTestApp/IoC/ConfigurationHelper.cs 
