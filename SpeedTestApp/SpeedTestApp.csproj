@@ -221,6 +221,10 @@
     <Compile Include="BL\Repository\IMeasureRepository.cs" />
     <Compile Include="BL\Repository\IPageRepository.cs" />
     <Compile Include="BL\Repository\ISiteRepository.cs" />
+    <Compile Include="BL\Repository\Memory\AppCache.cs" />
+    <Compile Include="BL\Repository\Memory\MemoryMeasureRepository.cs" />
+    <Compile Include="BL\Repository\Memory\MemoryPageRepository.cs" />
+    <Compile Include="BL\Repository\Memory\MemorySiteRepository.cs" />
     <Compile Include="BL\Service\IStorageModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\EF\PartialModel\MeasureEntity.cs" />

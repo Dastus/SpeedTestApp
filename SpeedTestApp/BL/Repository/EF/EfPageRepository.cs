@@ -13,6 +13,9 @@ namespace SpeedTestApp.BL.Repository.EF
             {
                 foreach (Page p in pages)
                 {
+                    //if (p == null)
+                    //    continue;
+
                     p.PageId = site.Pages.Value.Where(x => x.PageURL == p.PageURL)
                         .Select(x => x.PageId).FirstOrDefault();
 

@@ -36,18 +36,18 @@ namespace SpeedTestApp.Controllers
             if (filter != "" && filter != null)
             {                
                 string siteUrl = filter;
-                try
+
+                Site site = measureManager.MeasureResponse(siteUrl);
+
+                if (site != null)
                 {
-                    Site site = measureManager.MeasureResponse(siteUrl);
                     MeasuresViewModel vm = siteManager.GetViewModel(site);
                     memoryCache.Remove("vm");
                     memoryCache.Add("vm", vm, DateTime.Now.AddMinutes(10));
                     return PartialView("_PartialResult", vm);
                 }
-                catch (System.Net.WebException)
-                {
-                    ViewBag.ErrorMessage = $"SiteMap for http://{siteUrl} not found";                    
-                }
+                else
+                    ViewBag.ErrorMessage = $"Can't access {siteUrl}";
             }
             return PartialView("_PartialResult");
         }

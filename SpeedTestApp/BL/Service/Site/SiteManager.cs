@@ -48,7 +48,7 @@ namespace SpeedTestApp.BL.Service
             Site historicalSite = GetSite(site.Url);
 
             List<Page> historicalResults = historicalSite.Pages.Value.
-                OrderByDescending(x => x.MaxResponse).ToList();                     
+                OrderByDescending(x => x.MaxResponse).ToList();
 
             List<Page> currentResults = site.Pages.Value.
                 OrderByDescending(x => x.MaxResponse).ToList();            
