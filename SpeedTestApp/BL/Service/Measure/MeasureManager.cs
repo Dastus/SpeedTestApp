@@ -44,13 +44,20 @@ namespace SpeedTestApp.BL.Service
                 {
                     siteContent = client.DownloadString($@"http://{url}/sitemap.xml");
                 }
+                try
+                {
+                    xmlContent = XDocument.Parse(siteContent);
+                    XNamespace ns = xmlContent.Root.Name.Namespace;
+                    IEnumerable<string> stringResult = xmlContent.Descendants(ns + "loc").
+                        Select(e => e.Value);
 
-                xmlContent = XDocument.Parse(siteContent);
-                XNamespace ns = xmlContent.Root.Name.Namespace;
-                IEnumerable<string> stringResult = xmlContent.Descendants(ns + "loc").
-                    Select(e => e.Value);
-
-                return PerformMeasures(url, stringResult);
+                    return PerformMeasures(url, stringResult);
+                }
+                catch (Exception)
+                {
+                    throw new WebException();
+                }                
+                
             }
             catch (WebException)
             {                
