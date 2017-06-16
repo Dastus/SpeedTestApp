@@ -23,10 +23,11 @@ namespace SpeedTestApp.Controllers
 
         // GET: Home
         public ActionResult Index()
-        {            
-            if (memoryCache != null)
+        {
+            var cached = memoryCache.Get("vm");
+            if (cached != null)
             { 
-                return View(memoryCache.Get("vm"));
+                return View(cached);
             }
             return View();
         }
@@ -43,11 +44,11 @@ namespace SpeedTestApp.Controllers
                 {
                     MeasuresViewModel vm = siteManager.GetViewModel(site);
                     memoryCache.Remove("vm");
-                    memoryCache.Add("vm", vm, DateTime.Now.AddMinutes(10));
+                    memoryCache.Add("vm", vm, DateTime.Now.AddMinutes(5));
                     return PartialView("_PartialResult", vm);
                 }
                 else
-                    ViewBag.ErrorMessage = $"Can't access {siteUrl}";
+                    ViewBag.ErrorMessage = $"Can't build sitemap for {siteUrl}";
             }
             return PartialView("_PartialResult");
         }

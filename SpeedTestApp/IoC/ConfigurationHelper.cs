@@ -2,6 +2,7 @@
 using SpeedTestApp.Models;
 using SpeedTestApp.DAL.EF;
 using SpeedTestApp.BL.Repository;
+using SpeedTestApp.BL.Service.CustomWebClient;
 using SpeedTestApp.BL.Repository.EF;
 using SpeedTestApp.BL.Repository.Memory;
 using SpeedTestApp.BL.Service;
@@ -23,7 +24,7 @@ namespace SpeedTestApp.IoC
 
             temp.For<IPageManager>().Use<PageManager>();
             temp.For<ISiteManager>().Use<SiteManager>();
-            temp.For<IMeasureManager>().Use<MeasureManager>();
+            temp.For<IMeasureManager>().Use<MeasureManager>();            
         }
     }
 }

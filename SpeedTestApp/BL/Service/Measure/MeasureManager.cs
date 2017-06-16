@@ -1,6 +1,4 @@
 ﻿using System;
-using SpeedTestApp.Models;
-using SpeedTestApp.BL.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,16 +6,21 @@ using System.Net;
 using System.Xml.Linq;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using SpeedTestApp.Models;
+using SpeedTestApp.BL.Repository;
+using SpeedTestApp.BL.Service.CustomWebClient;
+using System.Runtime.Caching;
 
 namespace SpeedTestApp.BL.Service
 {
     public class MeasureManager : IMeasureManager
     {
         private IMeasureRepository measureRepository;
+        private MemoryCache memoryCache = MemoryCache.Default;
 
         public MeasureManager(IMeasureRepository repository)
         {
-            this.measureRepository = repository;
+            this.measureRepository = repository;                    
         }
 
         public void AddMeasure(Measure measure, Page page)
@@ -36,8 +39,8 @@ namespace SpeedTestApp.BL.Service
             string siteContent;
             XDocument xmlContent;
             try
-            {
-                using (var client = new WebClient())
+            {                
+                using (var client = new WebClientWithTimeout())
                 {
                     siteContent = client.DownloadString($@"http://{url}/sitemap.xml");
                 }
@@ -50,11 +53,20 @@ namespace SpeedTestApp.BL.Service
                 return PerformMeasures(url, stringResult);
             }
             catch (WebException)
-            {
-                
+            {                
                 HashSet<string> sitemap = new HashSet<string>();
-                GetSiteMapByUrl($@"https://{url}", ref sitemap);
-                Site site = PerformMeasures(url, sitemap);                
+                               
+
+                if (memoryCache.Get($"sitemap_{url}") != null)
+                    sitemap = memoryCache.Get($"sitemap_{url}") as HashSet<string>; 
+                else
+                {                
+                    GetSiteMapByUrl($@"https://{url}", ref sitemap);
+                    GetSiteMapByUrl($@"http://{url}", ref sitemap);
+                    memoryCache.Add($"sitemap_{url}", sitemap, DateTime.Now.AddMinutes(5));                                    
+                }
+
+                Site site = PerformMeasures(url, sitemap);
 
                 return (site.Pages.Value.Count == 0 ? null : site);
             }            
@@ -67,7 +79,7 @@ namespace SpeedTestApp.BL.Service
 
             Parallel.ForEach(pagesList, (page) =>
             {
-                using (var client = new WebClient())
+                using (var client = new WebClientWithTimeout())
                 {
                     Stopwatch sw = new Stopwatch();
                     try
@@ -104,8 +116,8 @@ namespace SpeedTestApp.BL.Service
 
             try
             {
-                using (var client = new WebClient())
-                {
+                using (var client = new WebClientWithTimeout(8000))
+                {                    
                     inputString = client.DownloadString(url);
                 }
 
@@ -115,12 +127,21 @@ namespace SpeedTestApp.BL.Service
 
                 while (m.Success)
                 {
-                    if (m.Groups[1].ToString().Contains(url))
-                        result.Add(m.Groups[1].ToString());
+                    string currentMatch = m.Groups[1].ToString();
+                    if (currentMatch.Contains(url))
+                        result.Add(currentMatch);
+                    else if (currentMatch.Length > 1
+                        && currentMatch.StartsWith("/")
+                        && currentMatch.EndsWith("/"))
+                        result.Add(url + currentMatch);
+
                     m = m.NextMatch();
                 }
             }
-            catch (WebException) { }
+            catch (WebException)
+            {
+                sitemap.Remove(url);
+            }
             catch (ArgumentException) { }
             catch (RegexMatchTimeoutException) { }            
 

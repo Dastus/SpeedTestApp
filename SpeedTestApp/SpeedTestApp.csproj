@@ -225,6 +225,9 @@
     <Compile Include="BL\Repository\Memory\MemoryMeasureRepository.cs" />
     <Compile Include="BL\Repository\Memory\MemoryPageRepository.cs" />
     <Compile Include="BL\Repository\Memory\MemorySiteRepository.cs" />
+    <Compile Include="BL\Service\CustomWebClient\WebClientWithTimeout.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="BL\Service\IStorageModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\EF\PartialModel\MeasureEntity.cs" />
