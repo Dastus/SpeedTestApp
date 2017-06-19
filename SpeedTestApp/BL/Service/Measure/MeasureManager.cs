@@ -35,14 +35,18 @@ namespace SpeedTestApp.BL.Service
         {
             if (url == null)
                 return null;
-            
+            if (url.StartsWith("http://"))
+                url = url.Remove(0, 7);
+            if (url.StartsWith("https://"))
+                url = url.Remove(0, 8);    
+
             string siteContent;
             XDocument xmlContent;
             try
             {                
                 using (var client = new WebClientWithTimeout())
                 {
-                    siteContent = client.DownloadString($@"http://{url}/sitemap.xml");
+                    siteContent = client.DownloadString(url);
                 }
                 try
                 {
@@ -67,9 +71,10 @@ namespace SpeedTestApp.BL.Service
                 if (memoryCache.Get($"sitemap_{url}") != null)
                     sitemap = memoryCache.Get($"sitemap_{url}") as HashSet<string>; 
                 else
-                {                
+                {
                     GetSiteMapByUrl($@"https://{url}", ref sitemap);
                     GetSiteMapByUrl($@"http://{url}", ref sitemap);
+
                     memoryCache.Add($"sitemap_{url}", sitemap, DateTime.Now.AddMinutes(5));                                    
                 }
 
