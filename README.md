@@ -5,7 +5,8 @@ Functionality:
 - Test results are displayed graphically and in table (slowest requests on top)
 - Table view contains min and max responses for each page
 - Table view contains links to history of responses for according page
-- Autorefresh of results is set to 10 seconds
+- Autorefresh of results is set to 30 seconds
+- Sitemap is cached for 5 minutes
 
 Features:
 - Ajax partial view used to display results
@@ -15,6 +16,7 @@ Features:
 Short notes about application:
 
 Application checks sitemap.xml file, if it's not found, simple web crawling logic used.
+Found sitemap stored for 5 minutes and used in next measures.
 This solution suits only for small sites!
 
 Info about responses is stored in memory cache ,but can be stored in DB, SQLExpress has been used.
